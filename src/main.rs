@@ -1,91 +1,29 @@
-use std::collections::{VecDeque, HashSet};
+// 4 父 trait 用于在另一个trait中使用某trait的功能,
+// 有时我们可能需要某个trait 使用另一个trait的功能.
+// 在这种情况下,需要能够依赖先关的trait也被实现.
+// 这个所需trait是我们实现的trait的父trait
 
-fn main() {
-    let a = 1;
-    match a {
-        0 => println!("0"),
-        1 => println!("1"),
-        _ => println!("other"),
+// 5 newtype 模式用以在外部类型上实现 trait
+// 孤儿规则(orphan rule) : 只要trait或类型对于当前create是本地的话,就可以在
+// 此类型上实现trait.
+// 一个绕开这个限制的方法的是使用newtype模式(newtype pattern).
+
+
+
+use std::fmt;
+use std::fmt::{Formatter, Error};
+use std::rc::Rc;
+
+trait OutPrint: fmt::Display {
+    fn out_print(&self) {
+        let output = self.to_string();
+        println!("output: {}", output);
     }
+}
 
-    let age: Result<u8, _> = "33".parse();
-
-    println!("{}", age.unwrap());
-
-    let mut stack = vec![];
-    stack.push(1);
-    stack.push(2);
-    stack.push(3);
-
-    while let Some(v) = stack.pop() {
-        println!("v is {}", v);
-    }
-
-    let mut que = VecDeque::new();
-    que.push_back(1);
-    que.push_back(2);
-    que.push_back(3);
-
-    while let Some(v) = que.pop_front() {
-        println!("v is {}", v);
-    }
-
-    let v = vec![1, 2, 3];
-    for (index, v) in v.iter().enumerate() {
-        println!("index {} v {}", index, v);
-    }
-
-    let mn = (1, 2, 3, 4);
-
-    let (a, .., b) = mn;
-    println!("a is {} b is {}", a, b);
-
-    let set: HashSet<i32> = HashSet::new();
-
-    fn print_point(&(x, y): &(i32, i32)) {
-        println!("x is {}, y is {}", x, y);
-    }
-
-    let x = 5;
-    match x {
-        1..=5 => println!("1..5"),
-        _ => println!("other"),
-    }
-
-
-    let p = Point { x: 1, y: 2 };
-
-    let Point { x: a, y: b } = p;
-
-
-    let c = 20;
-
-    match p {
-        Point { x, y } if y > 0 && x > 0 => println!("ok"),
-        _ => println!("ok"),
-    }
-
-    let _x = 3;
-    let _y = 4;
-
-    println!("_x is {}", _x);
-
-    let s = Some(String::from("hello"));
-
-    if let Some(_c) = s {
-        println!("found a string");
-    }
-
-    // println!("s is {}", s.unwrap());
-
-    //@运算符允许我们在创建一个存放值的同时,测试这个变量的值是否是匹配的模式
-
-    let msg = Message::Hello(3);
-
-    match msg {
-        Message::Hello(a@3..=7) => println!("a is {}", a),
-        Message::Hello(a@ 8..=10) => println!("a is {}", a),
-        _ => println!("k"),
+impl fmt::Display for Point {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        write!(f, "({}, {})", self.x, self.y)
     }
 }
 
@@ -94,33 +32,109 @@ struct Point {
     y: i32,
 }
 
-enum Color {
-    RGB(i32, i32, i32),
-    HSV(i32, i32, i32),
+impl OutPrint for Point {}
+
+
+fn main() {
+    let point = Point { x: 3, y: 4 };
+    point.out_print();
+
+    let w = Wrapper(vec![
+        String::from("kkk"),
+        String::from("kkk"),
+        String::from("kkk"),
+        String::from("kkk"),
+    ]);
+    println!("{}", w);
+
+    let x: Kilometers = 3;
+    let y = 3;
+
+    assert_eq!(x, y);
+
+    let t = Box::new(|| { println!("hhh") });
+    t();
+
+    // bar();
+
+    let s1 = "kkk";
+
+    let mut c = do_twice(add_one, 2);
+
+    println!("{:?}", c);
+
+    let d = wrapper_func(add_one, 3);
+    println!("{:?}", d);
+
+    let e = wrapper_func(|e| e + 2, 4);
+    println!("{:?}", e);
+
+    let clourse = |e| e + d;
+    let f = wrapper_func(clourse, 4);
+    println!("{:?}", f);
+
+    let clourse2= |e: i32| {
+        c = 33;
+        e + d
+    };
+    let g = wrapper_func2(clourse2, 4);
+    println!("{:?}", g);
+
+    let h = return_colurse();
+    let h2 = h(4);
+    println!("{:?}", h2);
+
 }
 
-enum Message {
-    Quit,
-    Move { x: i32, y: i32 },
-    Write(String),
-    ChangeColor(Color),
-    Hello(i32),
+fn return_colurse() -> Rc<dyn Fn(i32) -> i32>{
+
+    Rc::new(|e| e)
 }
 
-fn foo(_:i32, y: i32) {
-    println!("y is {}", y)
+fn wrapper_func<T>(t: T, v: i32) -> i32
+    where T: Fn(i32) -> i32{
+    t(v)
 }
 
-trait A {
-    fn bar(x: i32, y: i32);
+fn wrapper_func2<T>(mut t: T, v: i32) -> i32
+    where T:FnMut(i32) -> i32{
+    t(v)
 }
 
-struct B {
-    a: i32,
+// Fn, FnMut, FnOnce
+// 函数指针实现了这三个闭包,
+
+fn add_one(x: i32) -> i32 {
+    x + 1
 }
 
-impl A for B {
-    fn bar(_: i32, y: i32) {
-        println!("y is {}", y);
+fn do_twice(f: fn(i32) -> i32, a: i32) -> i32 {
+    f(a) + f(a)
+}
+
+fn generic<T>(t: T) {}
+
+// 等价于
+fn generic2<T: Sized>(t: T) {}
+
+fn generic3<T: ?Sized>(t: &T) {}
+
+fn bar() -> ! {
+    fn loop2() -> ! {
+        loop2()
+    }
+    loop2()
+}
+
+type Kilometers = i32;
+
+type T = Box<dyn Fn() + Send + 'static>;
+
+
+struct Wrapper(Vec<String>);
+
+impl fmt::Display for Wrapper {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        write!(f, "Wrapper ({})", self.0.join(" 0 "))
     }
 }
