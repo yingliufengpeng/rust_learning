@@ -1,5 +1,6 @@
 use std::fmt::{Display, Formatter, Error};
 
+/// 这是我们自己的gui的library库的使用
 pub trait Draw {
     fn draw(&self);
 }

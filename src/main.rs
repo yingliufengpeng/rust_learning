@@ -8,7 +8,7 @@
 // 此类型上实现trait.
 // 一个绕开这个限制的方法的是使用newtype模式(newtype pattern).
 
-
+/// 我的文档注释信息
 
 use std::fmt;
 use std::fmt::{Formatter, Error};

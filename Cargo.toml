@@ -11,6 +11,11 @@ members = [
     'gui',
 ]
 
+#[profile.dev]
+#opt-level = 0
+#
+#[profile.release]
+#opt-level = 3
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
@@ -20,3 +25,4 @@ getaver = {path = "./getaver"}
 gui = {path = "./gui"}
 bingbinggouderive = {path = "./bingbingou/bingbinggouderive"}
 maplit = "*"
+#rust-crypto = "0.2.36"

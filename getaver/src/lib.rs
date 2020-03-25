@@ -1,6 +1,21 @@
+///! 我的文档的注释
+
+
 pub struct AverCollect {
     list: Vec<i32>,
     aver: f64,
+}
+
+
+/// Add one to number given
+/// #Example
+/// ```
+/// let five = 5;
+/// assert_eq!(6, getaver::add_one(five));
+/// ```
+///
+pub fn add_one(x: i32) -> i32 {
+    x + 1
 }
 
 impl AverCollect {
@@ -43,4 +58,6 @@ mod tests {
     fn it_works() {
         assert_eq!(2 + 2, 4);
     }
+
+
 }
