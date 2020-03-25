@@ -30,12 +30,17 @@
       <sourceFolder url="file://$MODULE_DIR$/gui/examples" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/gui/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/gui/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/mylib/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/mylib/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/mylib/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/mylib/benches" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/bingbingou/bingbinggouderive/target" />
       <excludeFolder url="file://$MODULE_DIR$/bingbingou/target" />
       <excludeFolder url="file://$MODULE_DIR$/getaver/target" />
       <excludeFolder url="file://$MODULE_DIR$/gui/target" />
       <excludeFolder url="file://$MODULE_DIR$/mac/target" />
       <excludeFolder url="file://$MODULE_DIR$/main/target" />
+      <excludeFolder url="file://$MODULE_DIR$/mylib/target" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />

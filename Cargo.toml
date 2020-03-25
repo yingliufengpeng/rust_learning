@@ -9,6 +9,7 @@ members = [
     'bingbingou',
     'getaver',
     'gui',
+    'mylib',
 ]
 
 #[profile.dev]
@@ -23,6 +24,8 @@ mac = {path = "./mac"}
 bingbingou = {path = "./bingbingou"}
 getaver = {path = "./getaver"}
 gui = {path = "./gui"}
+mylib = {path = "./mylib"}
 bingbinggouderive = {path = "./bingbingou/bingbinggouderive"}
 maplit = "*"
+rand = "*"
 #rust-crypto = "0.2.36"
