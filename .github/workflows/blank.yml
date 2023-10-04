@@ -25,12 +25,30 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
+      # - name: Download site content
+      #   uses: actions/download-artifact@v2
+      #   with:
+      #     name: static-site
+     
+      - name: Archive Release
+        id: archive-release
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'zip'
+          filename: 'release.zip'
+          directory:  '书籍'
+
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          echo $(ls .)
+          echo $(ls 书籍)
+      
+      - name: Create GitHub Release 
+        id: create-new-release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+            tag_name: ${{ github.ref }}
+            release_name: Release ${{ github.ref }}
