@@ -36,13 +36,13 @@ jobs:
         with:
           type: 'zip'
           filename: 'release.zip'
-          directory:  '书籍'
+          directory:  '.'
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: |
           echo $(ls .)
-          echo $(ls 书籍)
+       
       
       - name: Create GitHub Release 
         id: create-new-release
